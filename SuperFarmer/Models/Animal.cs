@@ -8,7 +8,9 @@ namespace SuperFarmer.Models
         Cow,
         Horse,
         SmallDog,
-        BigDog
+        BigDog,
+        Wolf,
+        Fox
     }
 }
 
