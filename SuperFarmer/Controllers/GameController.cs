@@ -46,6 +46,14 @@ namespace SuperFarmer.Controllers
             _game?.NextTurn();
             return RedirectToAction("Play");
         }
+        
+        [HttpPost]
+        public IActionResult RollDice()
+        {
+            _game?.RollDice();
+            return RedirectToAction("Play");
+        }
+
 
     }   
 }

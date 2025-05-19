@@ -16,6 +16,9 @@ namespace SuperFarmer.Models
         public int CurrentRound { get; set; } = 1;
 
         public Player CurrentPlayer => Players[CurrentPlayerIndex];
+        
+        public (Animal, Animal)? LastRoll { get; set; }
+
 
         public Game(List<Player> players)
         {
@@ -31,6 +34,14 @@ namespace SuperFarmer.Models
                 CurrentRound++;
             }
         }
+        
+        public void RollDice()
+        {
+            var d1 = new Dice1();
+            var d2 = new Dice2();
+            LastRoll = (d1.Roll(), d2.Roll());
+        }
+
 
         
     }    
