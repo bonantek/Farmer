@@ -24,7 +24,9 @@ namespace SuperFarmer.Controllers
             var players = new List<Player>();
             for (int i = 1; i <= playerCount; i++)
             {
-                players.Add(new Player(i));
+                var player = new Player(i);
+                player.Animals[Animal.Rabbit] = 1;
+                players.Add(player);
             }
 
             _game = new Game(players);
