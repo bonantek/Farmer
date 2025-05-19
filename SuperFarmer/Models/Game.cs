@@ -12,6 +12,8 @@ namespace SuperFarmer.Models
         public bool IsOver { get; set; } = false;
 
         public Player? Winner { get; set; }
+        
+        public int CurrentRound { get; set; } = 1;
 
         public Player CurrentPlayer => Players[CurrentPlayerIndex];
 
@@ -20,6 +22,16 @@ namespace SuperFarmer.Models
             Players = players;
             CurrentPlayerIndex = 0;
         }
+        
+        public void NextTurn()
+        {
+            CurrentPlayerIndex = (CurrentPlayerIndex + 1) % Players.Count;
+            if (CurrentPlayerIndex == 0)
+            {
+                CurrentRound++;
+            }
+        }
+
         
     }    
 }
