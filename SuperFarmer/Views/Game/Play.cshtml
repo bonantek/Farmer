@@ -1,7 +1,12 @@
 @model SuperFarmer.Models.Game
 
 <h2>Tura: @Model.CurrentRound</h2>
-<h3>Kolej gracza`: @Model.CurrentPlayer.Index</h3>
+<h3>Kolej gracza: @Model.CurrentPlayer.Index</h3>
+
+@if (Model.LastRoll != null)
+{
+<p><strong>Wylosowane zwierzeta:</strong> @Model.LastRoll.Value.Item1 i @Model.LastRoll.Value.Item2</p>
+}
 
 
 <h4>Twoje zwierzęta:</h4>
@@ -12,11 +17,18 @@
     }
 </ul>
 
-<form asp-action="RollDice" method="post">
-    <button type="submit">🎲 Roll a Dice</button>
-</form>
+@if (!Model.DiceRolledThisTurn)
+{
+    <form asp-action="RollDice" method="post">
+        <button type="submit">🎲 Roll</button>
+    </form>
+}
 
 
-<form asp-action="NextTurn" method="post">
-    <button type="submit">Next player</button>
-</form>
+
+@if (Model.DiceRolledThisTurn)
+{
+    <form asp-action="NextTurn" method="post">
+        <button type="submit">Next player</button>
+    </form>
+}

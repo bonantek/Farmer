@@ -18,6 +18,9 @@ namespace SuperFarmer.Models
         public Player CurrentPlayer => Players[CurrentPlayerIndex];
         
         public (Animal, Animal)? LastRoll { get; set; }
+        
+        public bool DiceRolledThisTurn { get; set; } = false;
+
 
 
         public Game(List<Player> players)
@@ -33,6 +36,9 @@ namespace SuperFarmer.Models
             {
                 CurrentRound++;
             }
+            
+            DiceRolledThisTurn = false;
+            LastRoll = null;
         }
         
         public void RollDice()
@@ -54,6 +60,8 @@ namespace SuperFarmer.Models
 
             AddAnimal(roll1);
             AddAnimal(roll2);
+
+            DiceRolledThisTurn = true;
         }
 
 
