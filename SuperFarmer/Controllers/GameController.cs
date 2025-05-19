@@ -53,6 +53,7 @@ namespace SuperFarmer.Controllers
         public IActionResult RollDice()
         {
             _game?.RollDice();
+            _game?.Breed();
             return RedirectToAction("Play");
         }
 

@@ -47,22 +47,48 @@ namespace SuperFarmer.Models
             var d2 = new Dice2();
             LastRoll = (d1.Roll(), d2.Roll());
             
-            var (roll1, roll2) = LastRoll.Value;
-            var currentPlayer = CurrentPlayer;
-
-            void AddAnimal(Animal animal)
-            {
-                if (!currentPlayer.Animals.ContainsKey(animal))
-                    currentPlayer.Animals[animal] = 1;
-                else
-                    currentPlayer.Animals[animal] += 1;
-            }
-
-            AddAnimal(roll1);
-            AddAnimal(roll2);
-
             DiceRolledThisTurn = true;
         }
+        
+        public void Breed()
+        {
+            if (LastRoll == null) return;
+
+            var currentPlayer = CurrentPlayer;
+            var (roll1, roll2) = LastRoll.Value;
+            
+            var rolled = new Dictionary<Animal, int>();
+
+            foreach (var animal in new[] { roll1, roll2 })
+            {
+                if (!rolled.ContainsKey(animal))
+                    rolled[animal] = 1;
+                else
+                    rolled[animal]++;
+            }
+
+            var breedable = new[] { Animal.Rabbit, Animal.Sheep, Animal.Pig };
+
+            foreach (var type in breedable)
+            {
+                if (!rolled.ContainsKey(type)) continue;
+                
+                if (!currentPlayer.Animals.ContainsKey(type)) continue;
+
+                int owned = currentPlayer.Animals[type]; 
+                int fromDice = rolled.ContainsKey(type) ? rolled[type] : 0;
+
+                int total = owned + fromDice;
+                int pairs = total / 2;
+
+                if (pairs > 0)
+                {
+                    currentPlayer.Animals[type] += pairs;
+                }
+            }
+        }
+
+        
 
 
         
