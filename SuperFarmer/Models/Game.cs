@@ -88,7 +88,6 @@ namespace SuperFarmer.Models
             }
         }
         
-        
         public void AnimalEating()
         {
             if (LastRoll == null) return;
@@ -99,55 +98,58 @@ namespace SuperFarmer.Models
             bool foxRolled = false;
             bool wolfRolled = false;
 
-            if (roll1 == Animal.Fox)
-            {
-                foxRolled = true;
-            }
-            if (roll2 == Animal.Fox)
-            {
-                foxRolled = true;
-            }
+            if (roll1 == Animal.Fox) foxRolled = true;
+            if (roll2 == Animal.Fox) foxRolled = true;
 
-            if (roll1 == Animal.Wolf)
-            {
-                wolfRolled = true;
-            }
-            if (roll2 == Animal.Wolf)
-            {
-                wolfRolled = true;
-            }
-
+            if (roll1 == Animal.Wolf) wolfRolled = true;
+            if (roll2 == Animal.Wolf) wolfRolled = true;
 
             if (foxRolled)
             {
-                // all rabbits are eaten
-                if (currentPlayer.Animals.ContainsKey(Animal.Rabbit) && currentPlayer.Animals[Animal.Rabbit] > 1)
+                if (currentPlayer.Animals.ContainsKey(Animal.SmallDog) && currentPlayer.Animals[Animal.SmallDog] > 0)
                 {
-                    currentPlayer.Animals[Animal.Rabbit] = 1;
+                    currentPlayer.Animals[Animal.SmallDog] -= 1;
+
+                    if (currentPlayer.Animals[Animal.SmallDog] == 0)
+                        currentPlayer.Animals.Remove(Animal.SmallDog);
+                }
+                else
+                {
+                    if (currentPlayer.Animals.ContainsKey(Animal.Rabbit) && currentPlayer.Animals[Animal.Rabbit] > 1)
+                    {
+                        currentPlayer.Animals[Animal.Rabbit] = 1;
+                    }
                 }
             }
 
             if (wolfRolled)
             {
-                var lost = new[]
+                if (currentPlayer.Animals.ContainsKey(Animal.BigDog) && currentPlayer.Animals[Animal.BigDog] > 0)
                 {
-                    Animal.Sheep,
-                    Animal.Pig,
-                    Animal.Cow
-                };
+                    currentPlayer.Animals[Animal.BigDog] -= 1;
 
-                foreach (var animal in lost)
-                {
-                    currentPlayer.Animals.Remove(animal);
+                    if (currentPlayer.Animals[Animal.BigDog] == 0)
+                        currentPlayer.Animals.Remove(Animal.BigDog);
                 }
-
+                else
+                {
+                    var protectedAnimals = new[] { Animal.Rabbit, Animal.Horse, Animal.SmallDog };
+                    
+                    // blad -- nie da sie usuwac jesli sie aktualenie chodzi w foreach ;) 
+                    foreach (var animal in currentPlayer.Animals.Keys.ToList())
+                    {
+                        if (!protectedAnimals.Contains(animal))
+                        {
+                            currentPlayer.Animals.Remove(animal);
+                        }
+                    }
+                }
             }
         }
 
-
         
-
-
+        
+        
         
     }    
 }
