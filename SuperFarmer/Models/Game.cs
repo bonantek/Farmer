@@ -87,6 +87,63 @@ namespace SuperFarmer.Models
                 }
             }
         }
+        
+        
+        public void AnimalEating()
+        {
+            if (LastRoll == null) return;
+
+            var currentPlayer = CurrentPlayer;
+            var (roll1, roll2) = LastRoll.Value;
+
+            bool foxRolled = false;
+            bool wolfRolled = false;
+
+            if (roll1 == Animal.Fox)
+            {
+                foxRolled = true;
+            }
+            if (roll2 == Animal.Fox)
+            {
+                foxRolled = true;
+            }
+
+            if (roll1 == Animal.Wolf)
+            {
+                wolfRolled = true;
+            }
+            if (roll2 == Animal.Wolf)
+            {
+                wolfRolled = true;
+            }
+
+
+            if (foxRolled)
+            {
+                // all rabbits are eaten
+                if (currentPlayer.Animals.ContainsKey(Animal.Rabbit) && currentPlayer.Animals[Animal.Rabbit] > 1)
+                {
+                    currentPlayer.Animals[Animal.Rabbit] = 1;
+                }
+            }
+
+            if (wolfRolled)
+            {
+                var lost = new[]
+                {
+                    Animal.Sheep,
+                    Animal.Pig,
+                    Animal.Cow
+                };
+
+                foreach (var animal in lost)
+                {
+                    currentPlayer.Animals.Remove(animal);
+                }
+
+            }
+        }
+
 
         
 
