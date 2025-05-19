@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "New Game";
+}
+
+<h2>Start new Game</h2>
+
+<form asp-action="StartGame" method="post">
+    <label for="playerCount">Number of players (2–4):</label>
+    <input type="number" name="playerCount" min="2" max="4" required />
+    <button type="submit">Start</button>
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <p style="color:red;">@ViewData.ModelState.Values.First().Errors.First().ErrorMessage</p>
+}

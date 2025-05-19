@@ -1,0 +1,15 @@
+@model SuperFarmer.Models.Game
+
+<h2>Tura: @Model.CurrentPlayer.Index</h2>
+
+<h4>Twoje zwierzęta:</h4>
+<ul>
+    @foreach (var animal in Model.CurrentPlayer.Animals)
+    {
+        <li>@animal.Key: @animal.Value</li>
+    }
+</ul>
+
+<form asp-action="NextTurn" method="post">
+    <button type="submit">Zakończ turę</button>
+</form>
