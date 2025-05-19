@@ -40,6 +40,20 @@ namespace SuperFarmer.Models
             var d1 = new Dice1();
             var d2 = new Dice2();
             LastRoll = (d1.Roll(), d2.Roll());
+            
+            var (roll1, roll2) = LastRoll.Value;
+            var currentPlayer = CurrentPlayer;
+
+            void AddAnimal(Animal animal)
+            {
+                if (!currentPlayer.Animals.ContainsKey(animal))
+                    currentPlayer.Animals[animal] = 1;
+                else
+                    currentPlayer.Animals[animal] += 1;
+            }
+
+            AddAnimal(roll1);
+            AddAnimal(roll2);
         }
 
 
