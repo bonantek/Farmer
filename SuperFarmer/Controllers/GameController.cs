@@ -21,23 +21,7 @@ namespace SuperFarmer.Controllers
                 return View("Index");
             }
 
-            var players = new List<Player>();
-            var tempGame = new Game(new List<Player>());
-            
-            for (int i = 1; i <= playerCount; i++)
-            {
-                var player = new Player(i);
-                
-                if (tempGame.Bank[Animal.Rabbit] > 0)
-                {
-                    player.Animals[Animal.Rabbit] = 1;
-                    tempGame.Bank[Animal.Rabbit] -= 1;
-                }
-                players.Add(player);
-            }
-
-            _game = new Game(players);
-            _game.Bank = tempGame.Bank;
+            _game = Game.InitializeWithPlayers(playerCount);
             
             return RedirectToAction("Play");
         }
@@ -100,47 +84,22 @@ namespace SuperFarmer.Controllers
         [HttpPost]
         public IActionResult MakeExchange(string targetAnimal)
         {
-            
             if (_game == null || _game.DiceRolledThisTurn)
                 return RedirectToAction("Play");
 
             if (!Enum.TryParse<Animal>(targetAnimal, out var target))
                 return RedirectToAction("Play");
 
-            if (!_game.ExchangeRates.TryGetValue(target, out var rule))
-                return RedirectToAction("Play");
-
             var player = _game.CurrentPlayer;
-            var fromAnimal = rule.fromAnimal;
-            var cost = rule.cost;
 
-            if (!player.Animals.ContainsKey(fromAnimal) || player.Animals[fromAnimal] < cost)
-                return RedirectToAction("Play");
+            var success = player.TryExchange(target, _game.ExchangeRates, _game.Bank);
 
-            player.Animals[fromAnimal] -= cost;
-            if (player.Animals[fromAnimal] == 0)
-                player.Animals.Remove(fromAnimal);
-            
-            if (!_game.Bank.ContainsKey(fromAnimal))
-                _game.Bank[fromAnimal] = 0;
-            _game.Bank[fromAnimal] += cost;
+            if (!success)
+                TempData["Error"] = "Wymiana nie jest możliwa. Sprawdź liczbę zwierząt i bank.";
 
-
-            if (!_game.Bank.ContainsKey(target) || _game.Bank[target] < 1)
-            {
-                TempData["Error"] = $"W banku nie ma dostępnych {target}. Wymiana została anulowana.";
-                return RedirectToAction("Play");
-            }
-                
-
-            _game.Bank[target] -= 1;
-            
-            if (!player.Animals.ContainsKey(target))
-                player.Animals[target] = 0;
-
-            player.Animals[target] += 1;
             return RedirectToAction("Play");
         }
+
         
         //TODO: Add remove winner
         // public IActionResult RemoveWinner()

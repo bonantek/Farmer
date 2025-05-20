@@ -59,6 +59,26 @@ namespace SuperFarmer.Models
 
         }
         
+        public static Game InitializeWithPlayers(int playerCount)
+        {
+            var temp = new Game(new());
+
+            var players = new List<Player>();
+            for (int i = 1; i <= playerCount; i++)
+            {
+                var player = new Player(i);
+                if (temp.Bank[Animal.Rabbit] > 0)
+                {
+                    player.Animals[Animal.Rabbit] = 1;
+                    temp.Bank[Animal.Rabbit] -= 1;
+                }
+                players.Add(player);
+            }
+
+            return new Game(players) { Bank = temp.Bank };
+        }
+
+        
         public void NextTurn()
         {
             CurrentPlayerIndex = (CurrentPlayerIndex + 1) % Players.Count;
