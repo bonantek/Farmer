@@ -1,0 +1,42 @@
+@model SuperFarmer.Models.Game
+@{
+    var ownedAnimal = (SuperFarmer.Models.Animal)ViewBag.OwnedAnimal;
+    var exchanges = ViewBag.Exchanges as List<Tuple<SuperFarmer.Models.Animal, int>>;
+}
+
+<h2>Możliwe wymiany za @ownedAnimal</h2>
+
+@if (!exchanges.Any())
+{
+    <p><em>Nie możesz nic wymienić za @ownedAnimal – za mało sztuk.</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Na co</th>
+            <th>Koszt</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var ex in exchanges)
+        {
+        <tr>
+            <td>@ex.Item1</td> <!-- Target -->
+            <td>@ex.Item2 x @ownedAnimal</td> <!-- Cost -->
+            <td>
+                <form asp-action="MakeExchange" method="post">
+                    <input type="hidden" name="targetAnimal" value="@ex.Item1" />
+                    <button class="btn btn-success btn-sm">Potwierdź</button>
+                </form>
+            </td>
+        </tr>
+        }
+
+        </tbody>
+    </table>
+}
+
+<a asp-action="Play" class="btn btn-secondary">Wróć do gry</a>

@@ -57,6 +57,30 @@ namespace SuperFarmer.Controllers
             _game?.Breed();
             return RedirectToAction("Play");
         }
+        
+        public IActionResult ShowExchangeOptions(string animal)
+        {
+            if (_game == null || !Enum.TryParse<Animal>(animal, out var ownedAnimal))
+                return RedirectToAction("Play");
+
+            var player = _game.CurrentPlayer;
+            
+            int playerHas = player.Animals.ContainsKey(ownedAnimal) ? player.Animals[ownedAnimal] : 0;
+
+            var availableExchanges = _game.ExchangeRates
+                .Where(rate => rate.Value.fromAnimal == ownedAnimal && playerHas >= rate.Value.cost)
+                .Select(rate => Tuple.Create(rate.Key, rate.Value.cost))
+                .ToList();
+
+            ViewBag.OwnedAnimal = ownedAnimal;
+            ViewBag.Exchanges = availableExchanges;
+
+
+            return View("ExchangeOptions", _game);
+        }
+
+        
+        
 
 
     }   

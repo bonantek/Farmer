@@ -20,13 +20,23 @@ namespace SuperFarmer.Models
         public (Animal, Animal)? LastRoll { get; set; }
         
         public bool DiceRolledThisTurn { get; set; } = false;
-
-
+        
+        public Dictionary<Animal, (Animal fromAnimal, int cost)> ExchangeRates { get; set; }
 
         public Game(List<Player> players)
         {
             Players = players;
             CurrentPlayerIndex = 0;
+            
+            ExchangeRates = new Dictionary<Animal, (Animal, int)>
+            {
+                { Animal.Sheep,    (Animal.Rabbit, 6) },
+                { Animal.Pig,      (Animal.Sheep, 2) },
+                { Animal.Cow,      (Animal.Pig, 3) },
+                { Animal.Horse,    (Animal.Cow, 2) },
+                { Animal.SmallDog, (Animal.Sheep, 1) },
+                { Animal.BigDog,   (Animal.Cow, 1) }
+            };
         }
         
         public void NextTurn()
