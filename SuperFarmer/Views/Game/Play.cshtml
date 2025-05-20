@@ -99,3 +99,45 @@
         <button type="submit">Next player</button>
     </form>
 }
+
+<div class="modal fade" id="rollResultModal" tabindex="-1" aria-labelledby="rollResultLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <h5 class="modal-title w-100" id="rollResultLabel">Wylosowałeś:</h5>
+            </div>
+            <div class="modal-body">
+                @if (Model.LastRoll != null)
+                {
+                    var (a1, a2) = Model.LastRoll.Value;
+                    <div class="d-flex justify-content-center gap-4">
+                        <div>
+                            <img src="@Model.GetAnimalImagePath(a1)" width="60" />
+                            <p>@a1</p>
+                        </div>
+                        <div>
+                            <img src="@Model.GetAnimalImagePath(a2)" width="60" />
+                            <p>@a2</p>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.LastRoll != null && Model.DiceRolledThisTurn)
+{
+<script>
+    window.onload = () => {
+        const modal = new bootstrap.Modal(document.getElementById('rollResultModal'));
+        modal.show();
+    };
+</script>
+}
+
+
+
