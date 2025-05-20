@@ -119,12 +119,10 @@ namespace SuperFarmer.Controllers
             player.Animals[target] += 1;
             return RedirectToAction("Play");
         }
-
-
         
-        
-
-
+        //TODO: Add remove winner
+        // public IActionResult RemoveWinner()
+        // {}
     }   
 }
 
