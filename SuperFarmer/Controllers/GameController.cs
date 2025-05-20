@@ -22,14 +22,22 @@ namespace SuperFarmer.Controllers
             }
 
             var players = new List<Player>();
+            var tempGame = new Game(new List<Player>());
+            
             for (int i = 1; i <= playerCount; i++)
             {
                 var player = new Player(i);
-                player.Animals[Animal.Rabbit] = 1;
+                
+                if (tempGame.Bank[Animal.Rabbit] > 0)
+                {
+                    player.Animals[Animal.Rabbit] = 1;
+                    tempGame.Bank[Animal.Rabbit] -= 1;
+                }
                 players.Add(player);
             }
 
             _game = new Game(players);
+            _game.Bank = tempGame.Bank;
             
             return RedirectToAction("Play");
         }
@@ -112,6 +120,16 @@ namespace SuperFarmer.Controllers
             player.Animals[fromAnimal] -= cost;
             if (player.Animals[fromAnimal] == 0)
                 player.Animals.Remove(fromAnimal);
+            
+            if (!_game.Bank.ContainsKey(fromAnimal))
+                _game.Bank[fromAnimal] = 0;
+            _game.Bank[fromAnimal] += cost;
+            
+            
+            if (!_game.Bank.ContainsKey(target) || _game.Bank[target] == 0)
+                return RedirectToAction("Play"); // brak w banku!
+
+            _game.Bank[target] -= 1;
             
             if (!player.Animals.ContainsKey(target))
                 player.Animals[target] = 0;

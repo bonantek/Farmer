@@ -22,27 +22,48 @@
     <tbody>
     @foreach (var animal in Model.CurrentPlayer.Animals)
     {
+        <tr>
+            <td>@animal.Key</td>
+            <td>@animal.Value</td>
+            <td>
+                @if (!Model.DiceRolledThisTurn)
+                {
+                    <form asp-action="ShowExchangeOptions" method="get" style="display:inline;">
+                        <input type="hidden" name="animal" value="@animal.Key" />
+                        <button class="btn btn-sm btn-primary">Wymień</button>
+                    </form>
+                }
+                else
+                {
+                    <span class="text-muted">Nie mozesz zrobic zadnej akcji</span>
+                }
+            </td>
+
+        </tr>
+    }
+    </tbody>
+</table>
+
+<h4>Zwierzęta dostępne w banku:</h4>
+
+<table class="table table-bordered w-50">
+    <thead class="table-light">
+    <tr>
+        <th>Zwierzę</th>
+        <th>Ilość</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var animal in Model.Bank)
+    {
     <tr>
         <td>@animal.Key</td>
         <td>@animal.Value</td>
-        <td>
-            @if (!Model.DiceRolledThisTurn)
-            {
-            <form asp-action="ShowExchangeOptions" method="get" style="display:inline;">
-                <input type="hidden" name="animal" value="@animal.Key" />
-                <button class="btn btn-sm btn-primary">Wymień</button>
-            </form>
-            }
-            else
-            {
-            <span class="text-muted">Nie mozesz zrobic zadnej akcji</span>
-            }
-        </td>
-
     </tr>
     }
     </tbody>
 </table>
+
 
 
 
