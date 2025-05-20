@@ -124,10 +124,14 @@ namespace SuperFarmer.Controllers
             if (!_game.Bank.ContainsKey(fromAnimal))
                 _game.Bank[fromAnimal] = 0;
             _game.Bank[fromAnimal] += cost;
-            
-            
-            if (!_game.Bank.ContainsKey(target) || _game.Bank[target] == 0)
-                return RedirectToAction("Play"); // brak w banku!
+
+
+            if (!_game.Bank.ContainsKey(target) || _game.Bank[target] < 1)
+            {
+                TempData["Error"] = $"W banku nie ma dostępnych {target}. Wymiana została anulowana.";
+                return RedirectToAction("Play");
+            }
+                
 
             _game.Bank[target] -= 1;
             

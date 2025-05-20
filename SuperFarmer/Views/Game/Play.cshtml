@@ -8,6 +8,12 @@
 <p><strong>Wylosowane zwierzeta:</strong> @Model.LastRoll.Value.Item1 i @Model.LastRoll.Value.Item2</p>
 }
 
+@if (TempData["Error"] != null)
+{
+<div class="alert alert-danger" role="alert">
+    @TempData["Error"]
+</div>
+}
 
 <h4>Twoje zwierzęta:</h4>
 
