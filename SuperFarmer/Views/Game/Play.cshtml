@@ -26,7 +26,7 @@
         <td>@animal.Key</td>
         <td>@animal.Value</td>
         <td>
-            @if (!Model.DiceRolledThisTurn && !Model.HasExchangedThisTurn)
+            @if (!Model.DiceRolledThisTurn)
             {
             <form asp-action="ShowExchangeOptions" method="get" style="display:inline;">
                 <input type="hidden" name="animal" value="@animal.Key" />
