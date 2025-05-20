@@ -83,7 +83,11 @@ namespace SuperFarmer.Controllers
         [HttpPost]
         public IActionResult MakeExchange(string targetAnimal)
         {
-            if (_game == null || !Enum.TryParse<Animal>(targetAnimal, out var target))
+            
+            if (_game == null || _game.DiceRolledThisTurn || _game.HasExchangedThisTurn)
+                return RedirectToAction("Play");
+
+            if (!Enum.TryParse<Animal>(targetAnimal, out var target))
                 return RedirectToAction("Play");
 
             if (!_game.ExchangeRates.TryGetValue(target, out var rule))
@@ -104,6 +108,7 @@ namespace SuperFarmer.Controllers
                 player.Animals[target] = 0;
 
             player.Animals[target] += 1;
+            _game.HasExchangedThisTurn = true;
 
             return RedirectToAction("Play");
         }

@@ -22,6 +22,8 @@ namespace SuperFarmer.Models
         public bool DiceRolledThisTurn { get; set; } = false;
         
         public Dictionary<Animal, (Animal fromAnimal, int cost)> ExchangeRates { get; set; }
+        
+        public bool HasExchangedThisTurn { get; set; } = false;
 
         public Game(List<Player> players)
         {
@@ -48,6 +50,7 @@ namespace SuperFarmer.Models
             }
             
             DiceRolledThisTurn = false;
+            HasExchangedThisTurn = false;
             LastRoll = null;
         }
         
