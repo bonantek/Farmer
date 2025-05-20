@@ -26,11 +26,19 @@
         <td>@animal.Key</td>
         <td>@animal.Value</td>
         <td>
+            @if (!Model.DiceRolledThisTurn && !Model.HasExchangedThisTurn)
+            {
             <form asp-action="ShowExchangeOptions" method="get" style="display:inline;">
                 <input type="hidden" name="animal" value="@animal.Key" />
-                <button class="btn btn-primary btn-sm" type="submit">Wymień</button>
+                <button class="btn btn-sm btn-primary">Wymień</button>
             </form>
+            }
+            else
+            {
+            <span class="text-muted">Nie mozesz zrobic zadnej akcji</span>
+            }
         </td>
+
     </tr>
     }
     </tbody>
