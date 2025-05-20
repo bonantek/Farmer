@@ -10,12 +10,33 @@
 
 
 <h4>Twoje zwierzęta:</h4>
-<ul>
+
+<table class="table table-bordered table-striped w-100">
+    <thead class="table-dark">
+    <tr>
+        <th style="width: 30%">Zwierzę</th>
+        <th style="width: 30%">Ilość</th>
+        <th style="width: 40%">Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
     @foreach (var animal in Model.CurrentPlayer.Animals)
     {
-        <li>@animal.Key: @animal.Value</li>
+    <tr>
+        <td>@animal.Key</td>
+        <td>@animal.Value</td>
+        <td>
+            <form asp-action="ShowExchangeOptions" method="get" style="display:inline;">
+                <input type="hidden" name="animal" value="@animal.Key" />
+                <button class="btn btn-primary btn-sm" type="submit">Wymień</button>
+            </form>
+        </td>
+    </tr>
     }
-</ul>
+    </tbody>
+</table>
+
+
 
 @if (!Model.DiceRolledThisTurn)
 {
