@@ -20,33 +20,38 @@
 <table class="table table-bordered table-striped w-100">
     <thead class="table-dark">
     <tr>
-        <th style="width: 30%">Zwierzę</th>
-        <th style="width: 30%">Ilość</th>
-        <th style="width: 40%">Akcje</th>
+        <th style="width: 20%">Obraz</th>
+        <th style="width: 25%">Zwierzę</th>
+        <th style="width: 20%">Ilość</th>
+        <th style="width: 35%">Akcje</th>
     </tr>
     </thead>
+
     <tbody>
     @foreach (var animal in Model.CurrentPlayer.Animals)
     {
-        <tr>
-            <td>@animal.Key</td>
-            <td>@animal.Value</td>
-            <td>
-                @if (!Model.DiceRolledThisTurn)
-                {
-                    <form asp-action="ShowExchangeOptions" method="get" style="display:inline;">
-                        <input type="hidden" name="animal" value="@animal.Key" />
-                        <button class="btn btn-sm btn-primary">Wymień</button>
-                    </form>
-                }
-                else
-                {
-                    <span class="text-muted">Nie mozesz zrobic zadnej akcji</span>
-                }
-            </td>
-
-        </tr>
+    <tr>
+        <td>
+            <img src="@Model.GetAnimalImagePath(animal.Key)" alt="@animal.Key" width="40" />
+        </td>
+        <td>@animal.Key</td>
+        <td>@animal.Value</td>
+        <td>
+            @if (!Model.DiceRolledThisTurn)
+            {
+            <form asp-action="ShowExchangeOptions" method="get" style="display:inline;">
+                <input type="hidden" name="animal" value="@animal.Key" />
+                <button class="btn btn-sm btn-primary">Wymień</button>
+            </form>
+            }
+            else
+            {
+            <span class="text-muted">Nie możesz zrobić żadnej akcji</span>
+            }
+        </td>
+    </tr>
     }
+
     </tbody>
 </table>
 
@@ -55,18 +60,24 @@
 <table class="table table-bordered w-50">
     <thead class="table-light">
     <tr>
-        <th>Zwierzę</th>
-        <th>Ilość</th>
+        <th style="width: 20%">Obraz</th>
+        <th style="width: 50%">Zwierzę</th>
+        <th style="width: 30%">Ilość</th>
     </tr>
     </thead>
+
     <tbody>
     @foreach (var animal in Model.Bank)
     {
     <tr>
+        <td>
+            <img src="@Model.GetAnimalImagePath(animal.Key)" alt="@animal.Key" width="40" />
+        </td>
         <td>@animal.Key</td>
         <td>@animal.Value</td>
     </tr>
     }
+
     </tbody>
 </table>
 
