@@ -30,7 +30,7 @@ namespace SuperFarmer.Controllers
             }
 
             _game = new Game(players);
-
+            
             return RedirectToAction("Play");
         }
         
@@ -55,6 +55,15 @@ namespace SuperFarmer.Controllers
             _game?.RollDice();
             _game?.AnimalEating();
             _game?.Breed();
+            
+            var winnerIndex = _game.CheckVictory();
+
+            if (winnerIndex != null)
+            {
+                ViewBag.WinnerIndex = winnerIndex;
+                return View("Victory", _game);
+            }
+
             return RedirectToAction("Play");
         }
         
@@ -84,9 +93,6 @@ namespace SuperFarmer.Controllers
         public IActionResult MakeExchange(string targetAnimal)
         {
             
-            // if (_game == null || _game.DiceRolledThisTurn || _game.HasExchangedThisTurn)
-            //     return RedirectToAction("Play");
-            
             if (_game == null || _game.DiceRolledThisTurn)
                 return RedirectToAction("Play");
 
@@ -111,7 +117,6 @@ namespace SuperFarmer.Controllers
                 player.Animals[target] = 0;
 
             player.Animals[target] += 1;
-            // _game.HasExchangedThisTurn = true;
             return RedirectToAction("Play");
         }
 

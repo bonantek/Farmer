@@ -158,6 +158,27 @@ namespace SuperFarmer.Models
                 }
             }
         }
+        
+        public int? CheckVictory()
+        {
+            var required = new[] { Animal.Rabbit, Animal.Sheep, Animal.Pig, Animal.Cow, Animal.Horse };
+
+            for (int i = 0; i < Players.Count; i++)
+            {
+                var player = Players[i];
+                bool hasAll = required.All(animal =>
+                    player.Animals.ContainsKey(animal) && player.Animals[animal] > 0);
+
+                if (hasAll)
+                {
+                    Winner = player;
+                    return i; 
+                }
+            }
+
+            return null;
+        }
+
 
         
         
