@@ -78,6 +78,36 @@ namespace SuperFarmer.Controllers
 
             return View("ExchangeOptions", _game);
         }
+        
+        
+        [HttpPost]
+        public IActionResult MakeExchange(string targetAnimal)
+        {
+            if (_game == null || !Enum.TryParse<Animal>(targetAnimal, out var target))
+                return RedirectToAction("Play");
+
+            if (!_game.ExchangeRates.TryGetValue(target, out var rule))
+                return RedirectToAction("Play");
+
+            var player = _game.CurrentPlayer;
+            var fromAnimal = rule.fromAnimal;
+            var cost = rule.cost;
+
+            if (!player.Animals.ContainsKey(fromAnimal) || player.Animals[fromAnimal] < cost)
+                return RedirectToAction("Play");
+
+            player.Animals[fromAnimal] -= cost;
+            if (player.Animals[fromAnimal] == 0)
+                player.Animals.Remove(fromAnimal);
+            
+            if (!player.Animals.ContainsKey(target))
+                player.Animals[target] = 0;
+
+            player.Animals[target] += 1;
+
+            return RedirectToAction("Play");
+        }
+
 
         
         

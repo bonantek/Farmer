@@ -24,8 +24,8 @@ else
         @foreach (var ex in exchanges)
         {
         <tr>
-            <td>@ex.Item1</td> <!-- Target -->
-            <td>@ex.Item2 x @ownedAnimal</td> <!-- Cost -->
+            <td>@ex.Item1</td> 
+            <td>@ex.Item2 za @ownedAnimal</td>
             <td>
                 <form asp-action="MakeExchange" method="post">
                     <input type="hidden" name="targetAnimal" value="@ex.Item1" />
