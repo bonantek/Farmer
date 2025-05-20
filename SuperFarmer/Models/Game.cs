@@ -24,7 +24,12 @@ namespace SuperFarmer.Models
         public Dictionary<Animal, (Animal fromAnimal, int cost)> ExchangeRates { get; set; }
         
         public Dictionary<Animal, int> Bank { get; set; }
-
+        
+        public string GetAnimalImagePath(Animal animal)
+        {
+            return $"/images/{animal.ToString().ToLower()}.png";
+        }
+        
 
         public Game(List<Player> players)
         {
