@@ -122,11 +122,7 @@ namespace SuperFarmer.Models
 
             foreach (var type in breedable)
             {
-                if (!rolled.ContainsKey(type)) continue;
-                
-                if (!currentPlayer.Animals.ContainsKey(type)) continue;
-
-                int owned = currentPlayer.Animals[type]; 
+                int owned = currentPlayer.Animals.ContainsKey(type) ? currentPlayer.Animals[type] : 0;
                 int fromDice = rolled.ContainsKey(type) ? rolled[type] : 0;
 
                 int total = owned + fromDice;
@@ -139,11 +135,15 @@ namespace SuperFarmer.Models
 
                     if (toGive > 0)
                     {
+                        if (!currentPlayer.Animals.ContainsKey(type))
+                            currentPlayer.Animals[type] = 0;
+
                         currentPlayer.Animals[type] += toGive;
                         Bank[type] -= toGive;
                     }
                 }
             }
+
         }
         
         public void AnimalEating()
