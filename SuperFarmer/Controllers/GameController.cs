@@ -99,7 +99,50 @@ namespace SuperFarmer.Controllers
 
             return RedirectToAction("Play");
         }
+        
+        public IActionResult ShowTradesWithPlayers(string animal)
+        {
+            if (_game == null || !Enum.TryParse(animal, out Animal offeredAnimal))
+                return RedirectToAction("Play");
 
+            var currentPlayer = _game.CurrentPlayer;
+
+            var possibleTrades = _game.GetPossibleTradesWithOtherPlayers(currentPlayer, offeredAnimal);
+
+            ViewBag.OfferedAnimal = offeredAnimal;
+            ViewBag.PossibleTrades = possibleTrades;
+
+            return View("PlayerTrades", _game);
+        }
+        
+        [HttpPost]
+        public IActionResult ExecutePlayerTrade(int targetPlayerIndex, Animal targetAnimal, int targetAmount, Animal offeredAnimal, int offeredAmount)
+        {
+            if (_game == null || _game.DiceRolledThisTurn)
+                return RedirectToAction("Play");
+
+            var player = _game.CurrentPlayer;
+            if (targetPlayerIndex < 0 || targetPlayerIndex >= _game.Players.Count)
+                return RedirectToAction("Play");
+
+            var targetPlayer = _game.Players[targetPlayerIndex];
+            
+            if (!player.Animals.TryGetValue(offeredAnimal, out int ownedOffered) || ownedOffered < offeredAmount)
+                return RedirectToAction("Play");
+
+            if (!targetPlayer.Animals.TryGetValue(targetAnimal, out int ownedTarget) || ownedTarget < targetAmount)
+                return RedirectToAction("Play");
+            
+            player.Animals[offeredAnimal] -= offeredAmount;
+            if (player.Animals[offeredAnimal] == 0) player.Animals.Remove(offeredAnimal);
+            player.Animals[targetAnimal] = player.Animals.GetValueOrDefault(targetAnimal) + targetAmount;
+
+            targetPlayer.Animals[targetAnimal] -= targetAmount;
+            if (targetPlayer.Animals[targetAnimal] == 0) targetPlayer.Animals.Remove(targetAnimal);
+            targetPlayer.Animals[offeredAnimal] = targetPlayer.Animals.GetValueOrDefault(offeredAnimal) + offeredAmount;
+
+            return RedirectToAction("Play");
+        }
         
         //TODO: Add remove winner
         // public IActionResult RemoveWinner()

@@ -1,0 +1,45 @@
+@model SuperFarmer.Models.Game
+@{
+    var trades = ViewBag.PossibleTrades as List<(int, SuperFarmer.Models.Animal, int, SuperFarmer.Models.Animal, int)>;
+    var offered = (SuperFarmer.Models.Animal)ViewBag.OfferedAnimal;
+}
+
+<h3>Możliwe wymiany z innymi graczami za: @offered</h3>
+
+@if (trades == null || !trades.Any())
+{
+    <p>Brak dostępnych wymian.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Gracz</th>
+            <th>Dostaniesz</th>
+            <th>Oddasz</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var trade in trades)
+        {
+            <tr>
+                <td>Gracz @trade.Item1</td>
+                <td>@trade.Item2 × @trade.Item3</td>
+                <td>@trade.Item4 × @trade.Item5</td>
+                <td>
+                    <form asp-action="ExecutePlayerTrade" method="post">
+                        <input type="hidden" name="targetPlayerIndex" value="@trade.Item1" />
+                        <input type="hidden" name="targetAnimal" value="@trade.Item2" />
+                        <input type="hidden" name="targetAmount" value="@trade.Item3" />
+                        <input type="hidden" name="offeredAnimal" value="@trade.Item4" />
+                        <input type="hidden" name="offeredAmount" value="@trade.Item5" />
+                        <button class="btn btn-sm btn-success">Wymień</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

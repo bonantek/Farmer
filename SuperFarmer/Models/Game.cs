@@ -145,7 +145,6 @@ namespace SuperFarmer.Models
             }
 
         }
-        
         public void AnimalEating()
         {
             if (LastRoll == null) return;
@@ -155,7 +154,8 @@ namespace SuperFarmer.Models
 
             bool foxRolled = roll1 == Animal.Fox || roll2 == Animal.Fox;
             bool wolfRolled = roll1 == Animal.Wolf || roll2 == Animal.Wolf;
-            
+
+            // 1. Lis
             if (foxRolled)
             {
                 if (currentPlayer.Animals.ContainsKey(Animal.SmallDog) && currentPlayer.Animals[Animal.SmallDog] > 0)
@@ -164,26 +164,20 @@ namespace SuperFarmer.Models
                     if (currentPlayer.Animals[Animal.SmallDog] == 0)
                         currentPlayer.Animals.Remove(Animal.SmallDog);
 
-                    // wraca do banku
-                    if (!Bank.ContainsKey(Animal.SmallDog)) Bank[Animal.SmallDog] = 0;
-                    Bank[Animal.SmallDog] += 1;
+                    Bank[Animal.SmallDog] = Bank.GetValueOrDefault(Animal.SmallDog) + 1;
                 }
-                else
+                else if (currentPlayer.Animals.ContainsKey(Animal.Rabbit))
                 {
-                    if (currentPlayer.Animals.ContainsKey(Animal.Rabbit))
+                    int lost = currentPlayer.Animals[Animal.Rabbit] - 1;
+                    if (lost > 0)
                     {
-                        int lost = currentPlayer.Animals[Animal.Rabbit] - 1;
-                        if (lost > 0)
-                        {
-                            currentPlayer.Animals[Animal.Rabbit] = 1;
-
-                            if (!Bank.ContainsKey(Animal.Rabbit)) Bank[Animal.Rabbit] = 0;
-                            Bank[Animal.Rabbit] += lost;
-                        }
+                        currentPlayer.Animals[Animal.Rabbit] = 1;
+                        Bank[Animal.Rabbit] = Bank.GetValueOrDefault(Animal.Rabbit) + lost;
                     }
                 }
             }
-            
+
+            // 2. Wilk
             if (wolfRolled)
             {
                 if (currentPlayer.Animals.ContainsKey(Animal.BigDog) && currentPlayer.Animals[Animal.BigDog] > 0)
@@ -192,13 +186,12 @@ namespace SuperFarmer.Models
                     if (currentPlayer.Animals[Animal.BigDog] == 0)
                         currentPlayer.Animals.Remove(Animal.BigDog);
 
-                    // wraca do banku
-                    if (!Bank.ContainsKey(Animal.BigDog)) Bank[Animal.BigDog] = 0;
-                    Bank[Animal.BigDog] += 1;
+                    Bank[Animal.BigDog] = Bank.GetValueOrDefault(Animal.BigDog) + 1;
                 }
                 else
                 {
                     var protectedAnimals = new[] { Animal.Rabbit, Animal.Horse, Animal.SmallDog };
+
                     var animalsToRemove = currentPlayer.Animals.Keys
                         .Where(a => !protectedAnimals.Contains(a))
                         .ToList();
@@ -207,9 +200,7 @@ namespace SuperFarmer.Models
                     {
                         int amount = currentPlayer.Animals[animal];
                         currentPlayer.Animals.Remove(animal);
-
-                        if (!Bank.ContainsKey(animal)) Bank[animal] = 0;
-                        Bank[animal] += amount;
+                        Bank[animal] = Bank.GetValueOrDefault(animal) + amount;
                     }
                 }
             }
@@ -235,6 +226,50 @@ namespace SuperFarmer.Models
 
             return null;
         }
+        
+        
+        public List<(int targetPlayerIndex, Animal targetAnimal, int targetAmount, Animal offeredAnimal, int offeredAmount)>
+            GetPossibleTradesWithOtherPlayers(Player currentPlayer, Animal offeredAnimal)
+        {
+            var trades = new List<(int, Animal, int, Animal, int)>();
+
+            if (!ExchangeRates.Values.Any(e => e.fromAnimal == offeredAnimal))
+                return trades;
+
+            foreach (var kvp in ExchangeRates)
+            {
+                var targetAnimal = kvp.Key;
+                var (fromAnimal, cost) = kvp.Value;
+
+                if (fromAnimal != offeredAnimal)
+                    continue;
+
+                int howManySetsPlayerCanOffer = currentPlayer.Animals.TryGetValue(offeredAnimal, out var ownedAmount)
+                    ? ownedAmount / cost
+                    : 0;
+
+                if (howManySetsPlayerCanOffer == 0)
+                    continue;
+
+                for (int i = 0; i < Players.Count; i++)
+                {
+                    var otherPlayer = Players[i];
+                    if (otherPlayer == currentPlayer) continue;
+
+                    if (otherPlayer.Animals.TryGetValue(targetAnimal, out var hasTarget))
+                    {
+                        int maxTradable = Math.Min(howManySetsPlayerCanOffer, hasTarget);
+                        if (maxTradable > 0)
+                        {
+                            trades.Add((i, targetAnimal, maxTradable, offeredAnimal, cost * maxTradable));
+                        }
+                    }
+                }
+            }
+
+            return trades;
+        }
+
 
 
         
