@@ -1,0 +1,72 @@
+@model SuperFarmer.Models.Game
+@{
+    ViewData["Title"] = "Instrukcja gry";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center mb-4">📘 Instrukcja gry</h1>
+
+    <p>
+        SuperFarmer to strategiczna gra planszowa, w której zarządzasz swoim stadem i wymieniasz zwierzęta, aby zdobyć wszystkie rodzaje i zostać zwycięzcą. Rzucasz dwiema kostkami, hodujesz zwierzęta, bronisz się przed wilkiem i lisem oraz wymieniasz zasoby według tabeli poniżej.
+    </p>
+
+    <h3 class="mt-5">Cel gry</h3>
+    <p>
+        Zgromadzenie w swoim stadzie przynajmniej:
+        <strong>jednego królika, owcy, świni, krowy i konia</strong>.
+    </p>
+
+    <h3 class="mt-4">Tabela wymian</h3>
+
+    <table class="table table-bordered table-striped mt-3 text-center align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Otrzymujesz</th>
+                <th>Oddajesz</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var entry in Model.ExchangeRates)
+        {
+            var target = entry.Key;
+            var from = entry.Value.fromAnimal;
+            var cost = entry.Value.cost;
+            <tr>
+                <td>
+                    <img src="@Model.GetAnimalImagePath(target)" width="40" class="me-2" />
+                    @target
+                </td>
+                <td>
+                    @cost × <img src="@Model.GetAnimalImagePath(from)" width="40" class="me-2" />
+                    @from
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <h3 class="mt-5">Wilk i lis</h3>
+    <ul class="list-unstyled">
+        <li class="mb-3 d-flex align-items-center">
+            <img src="@Model.GetAnimalImagePath(Animal.Wolf)" width="40" class="me-3" />
+            <strong>Wilk</strong>: zjada wszystkie zwierzęta oprócz konia, królika i małego psa, chyba że masz dużego psa.
+        </li>
+        <li class="mb-3 d-flex align-items-center">
+            <img src="@Model.GetAnimalImagePath(Animal.Fox)" width="40" class="me-3" />
+            <strong>Lis</strong>: zjada wszystkie króliki poza jednym, chyba że masz małego psa.
+        </li>
+    </ul>
+
+
+    <h3 class="mt-4">Inne zasady</h3>
+    <ul>
+        <li>Na początku gry każdy gracz otrzymuje 1 królika.</li>
+        <li>Przed rzutem możesz wykonać dowolną liczbę wymian z bankiem (lub jednym graczem).</li>
+        <li>Wymiany są możliwe tylko jeśli bank posiada odpowiednie zwierzęta.</li>
+        <li>Gracz może posiadać psy chroniące przed atakami lisów i wilków.</li>
+    </ul>
+
+    <div class="text-center mt-5">
+        <a asp-action="Index" class="btn btn-primary btn-lg">🎮 Rozpocznij grę</a>
+    </div>
+</div>

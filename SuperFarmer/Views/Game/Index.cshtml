@@ -3,6 +3,7 @@
 }
 
 <div class="text-center mt-5">
+    <img src="favicon.png" width="120" alt="SuperFarmer Logo" class="mb-3" />
     <h1 class="display-4">SuperFarmer</h1>
     <p class="lead mt-3">
         Witaj w grze SuperFarmer! Hoduj zwierzęta, wymieniaj je z innymi graczami i zostań najlepszym farmerem!
@@ -13,7 +14,7 @@
             <form asp-action="StartGame" method="post">
                 <div class="mb-3">
                     <label for="playerCount" class="form-label"><strong>Wybierz liczbę graczy:</strong></label>
-                    <input type="number" name="playerCount" class="form-control form-control-lg text-center" min="2" max="4" required />
+                    <input type="number" name="playerCount" class="form-control form-control-lg text-center" min="2" max="4" required/>
                 </div>
 
                 <button type="submit" class="btn btn-success btn-lg w-100">Rozpocznij grę</button>

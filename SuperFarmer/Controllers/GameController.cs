@@ -144,6 +144,15 @@ namespace SuperFarmer.Controllers
             return RedirectToAction("Play");
         }
         
+        public IActionResult Instructions()
+        {
+            if (_game == null)
+                _game = new Game(new List<Player>()); // tylko po to, by mieć dostęp do .ExchangeRates i .GetAnimalImagePath
+
+            return View(_game);
+        }
+
+        
         //TODO: Add remove winner
         // public IActionResult RemoveWinner()
         // {}
