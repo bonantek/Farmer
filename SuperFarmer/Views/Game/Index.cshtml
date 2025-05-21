@@ -1,16 +1,30 @@
 @{
-    ViewData["Title"] = "New Game";
+    ViewData["Title"] = "Nowa gra";
 }
 
-<h2>Start new Game</h2>
+<div class="text-center mt-5">
+    <h1 class="display-4">SuperFarmer</h1>
+    <p class="lead mt-3">
+        Witaj w grze SuperFarmer! Hoduj zwierzęta, wymieniaj je z innymi graczami i zostań najlepszym farmerem!
+    </p>
 
-<form asp-action="StartGame" method="post">
-    <label for="playerCount">Number of players (2–4):</label>
-    <input type="number" name="playerCount" min="2" max="4" required />
-    <button type="submit">Start</button>
-</form>
+    <div class="card mt-4 mx-auto" style="max-width: 400px;">
+        <div class="card-body">
+            <form asp-action="StartGame" method="post">
+                <div class="mb-3">
+                    <label for="playerCount" class="form-label"><strong>Wybierz liczbę graczy:</strong></label>
+                    <input type="number" name="playerCount" class="form-control form-control-lg text-center" min="2" max="4" required />
+                </div>
 
-@if (!ViewData.ModelState.IsValid)
-{
-    <p style="color:red;">@ViewData.ModelState.Values.First().Errors.First().ErrorMessage</p>
-}
+                <button type="submit" class="btn btn-success btn-lg w-100">Rozpocznij grę</button>
+            </form>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger mt-3">
+                    @ViewData.ModelState.Values.First().Errors.First().ErrorMessage
+                </div>
+            }
+        </div>
+    </div>
+</div>
