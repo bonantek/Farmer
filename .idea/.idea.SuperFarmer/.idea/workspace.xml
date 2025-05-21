@@ -8,10 +8,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c345d8c0-4902-401d-8b1e-4d29ac8bd4c0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SuperFarmer/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SuperFarmer/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SuperFarmer.sln" beforeDir="false" afterPath="$PROJECT_DIR$/SuperFarmer.sln" afterDir="false" />
-    </list>
+    <list default="true" id="c345d8c0-4902-401d-8b1e-4d29ac8bd4c0" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -101,6 +98,7 @@
       <option name="presentableId" value="Default" />
       <updated>1747667231283</updated>
       <workItem from="1747667232373" duration="3377000" />
+      <workItem from="1747825761761" duration="339000" />
     </task>
     <servers />
   </component>
@@ -122,24 +120,5 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/SuperFarmer/Controllers/GameController.cs</url>
-          <line>29</line>
-          <properties documentPath="$PROJECT_DIR$/SuperFarmer/Controllers/GameController.cs" containingFunctionPresentation="Method 'StartGame'">
-            <startOffsets>
-              <option value="750" />
-            </startOffsets>
-            <endOffsets>
-              <option value="776" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

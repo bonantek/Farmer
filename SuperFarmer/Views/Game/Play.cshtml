@@ -39,10 +39,15 @@
         <td>
             @if (!Model.DiceRolledThisTurn)
             {
-            <form asp-action="ShowExchangeOptions" method="get" style="display:inline;">
-                <input type="hidden" name="animal" value="@animal.Key" />
-                <button class="btn btn-sm btn-primary">Wymień</button>
-            </form>
+                <form asp-action="ShowExchangeOptions" method="get" style="display:inline;">
+                    <input type="hidden" name="animal" value="@animal.Key" />
+                    <button class="btn btn-sm btn-outline-secondary">Wymień</button>
+                </form>
+                <form asp-action="ShowTradesWithPlayers" method="get" style="display:inline;">
+                    <input type="hidden" name="animal" value="@animal.Key" />
+                    <button class="btn btn-sm btn-outline-secondary">Wymień z innym graczem</button>
+                </form>
+
             }
             else
             {
