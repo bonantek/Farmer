@@ -6,7 +6,7 @@ namespace SuperFarmer.Controllers
     public class GameController : Controller
     {
         private static Game? _game;
-        
+        public static bool GameStarted => _game != null && _game.Players.Count > 0;
         public IActionResult Index()
         {
             return View();
@@ -28,11 +28,15 @@ namespace SuperFarmer.Controllers
         
         public IActionResult Play()
         {
-            if (_game == null)
+            if (_game == null || _game.Players.Count == 0)
+            {
+                TempData["Error"] = "Musisz najpierw rozpocząć nową grę.";
                 return RedirectToAction("Index");
+            }
 
             return View(_game);
         }
+
         
         [HttpPost]
         public IActionResult NextTurn()
