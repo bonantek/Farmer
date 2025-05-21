@@ -154,8 +154,7 @@ namespace SuperFarmer.Models
 
             bool foxRolled = roll1 == Animal.Fox || roll2 == Animal.Fox;
             bool wolfRolled = roll1 == Animal.Wolf || roll2 == Animal.Wolf;
-
-            // 1. Lis
+            
             if (foxRolled)
             {
                 if (currentPlayer.Animals.ContainsKey(Animal.SmallDog) && currentPlayer.Animals[Animal.SmallDog] > 0)
@@ -176,8 +175,7 @@ namespace SuperFarmer.Models
                     }
                 }
             }
-
-            // 2. Wilk
+            
             if (wolfRolled)
             {
                 if (currentPlayer.Animals.ContainsKey(Animal.BigDog) && currentPlayer.Animals[Animal.BigDog] > 0)
@@ -226,9 +224,10 @@ namespace SuperFarmer.Models
 
             return null;
         }
-        
-        
-        public List<(int targetPlayerIndex, Animal targetAnimal, int targetAmount, Animal offeredAnimal, int offeredAmount)>
+
+
+        public List<(int targetPlayerIndex, Animal targetAnimal, int targetAmount, Animal offeredAnimal, int
+                offeredAmount)>
             GetPossibleTradesWithOtherPlayers(Player currentPlayer, Animal offeredAnimal)
         {
             var trades = new List<(int, Animal, int, Animal, int)>();
@@ -269,13 +268,6 @@ namespace SuperFarmer.Models
 
             return trades;
         }
-
-
-
-        
-        
-        
-        
     }    
 }
 
