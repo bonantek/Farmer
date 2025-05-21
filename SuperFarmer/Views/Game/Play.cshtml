@@ -1,109 +1,102 @@
 @model SuperFarmer.Models.Game
 
-<h2>Tura: @Model.CurrentRound</h2>
-<h3>Kolej gracza: @Model.CurrentPlayer.Index</h3>
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h1 class="display-4">SuperFarmer</h1>
+        <h2 class="text-success">Kolej gracza numer @Model.CurrentPlayer.Index</h2>
+    </div>
 
-@if (Model.LastRoll != null)
-{
-<p><strong>Wylosowane zwierzeta:</strong> @Model.LastRoll.Value.Item1 i @Model.LastRoll.Value.Item2</p>
-}
+    @if (Model.LastRoll != null)
+    {
+        <div class="alert alert-info text-center">
+            <strong>Wylosowane zwierzęta:</strong> @Model.LastRoll.Value.Item1 i @Model.LastRoll.Value.Item2
+        </div>
+    }
 
-@if (TempData["Error"] != null)
-{
-<div class="alert alert-danger" role="alert">
-    @TempData["Error"]
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger text-center">
+            @TempData["Error"]
+        </div>
+    }
+
+    <h3 class="mt-4">Twoje zwierzęta:</h3>
+    <table class="table table-bordered table-striped w-100">
+        <thead class="table-dark text-center">
+        <tr>
+            <th>Obraz</th>
+            <th>Zwierzę</th>
+            <th>Ilość</th>
+            <th>Akcje</th>
+        </tr>
+        </thead>
+        <tbody class="text-center align-middle">
+        @foreach (var animal in Model.CurrentPlayer.Animals)
+        {
+            <tr>
+                <td><img src="@Model.GetAnimalImagePath(animal.Key)" alt="@animal.Key" width="50" /></td>
+                <td>@animal.Key</td>
+                <td>@animal.Value</td>
+                <td>
+                    @if (!Model.DiceRolledThisTurn)
+                    {
+                        <form asp-action="ShowExchangeOptions" method="get" style="display:inline;">
+                            <input type="hidden" name="animal" value="@animal.Key" />
+                            <button class="btn btn-sm btn-outline-primary">Wymień</button>
+                        </form>
+                        <form asp-action="ShowTradesWithPlayers" method="get" style="display:inline;">
+                            <input type="hidden" name="animal" value="@animal.Key" />
+                            <button class="btn btn-sm btn-outline-secondary">Z innym graczem</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Brak akcji</span>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <h3 class="mt-5">Zwierzęta dostępne w banku:</h3>
+    <table class="table table-bordered table-striped w-100">
+        <thead class="table-light text-center">
+        <tr>
+            <th>Obraz</th>
+            <th>Zwierzę</th>
+            <th>Ilość</th>
+        </tr>
+        </thead>
+        <tbody class="text-center align-middle">
+        @foreach (var animal in Model.Bank)
+        {
+            <tr>
+                <td><img src="@Model.GetAnimalImagePath(animal.Key)" alt="@animal.Key" width="50" /></td>
+                <td>@animal.Key</td>
+                <td>@animal.Value</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <div class="text-center my-5">
+        @if (!Model.DiceRolledThisTurn)
+        {
+            <form asp-action="RollDice" method="post">
+                <button type="submit" class="btn btn-success btn-lg px-5 py-3">Rzuć kośćmi</button>
+            </form>
+        }
+        else
+        {
+            <form asp-action="NextTurn" method="post">
+                <button type="submit" class="btn btn-warning btn-lg px-5 py-3">➡️ Następny gracz</button>
+            </form>
+        }
+    </div>
+
+    <p class="text-muted text-end mt-4">Tura gry: @Model.CurrentRound</p>
 </div>
-}
-
-<h4>Twoje zwierzęta:</h4>
-
-<table class="table table-bordered table-striped w-100">
-    <thead class="table-dark">
-    <tr>
-        <th style="width: 20%">Obraz</th>
-        <th style="width: 25%">Zwierzę</th>
-        <th style="width: 20%">Ilość</th>
-        <th style="width: 35%">Akcje</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    @foreach (var animal in Model.CurrentPlayer.Animals)
-    {
-    <tr>
-        <td>
-            <img src="@Model.GetAnimalImagePath(animal.Key)" alt="@animal.Key" width="40" />
-        </td>
-        <td>@animal.Key</td>
-        <td>@animal.Value</td>
-        <td>
-            @if (!Model.DiceRolledThisTurn)
-            {
-                <form asp-action="ShowExchangeOptions" method="get" style="display:inline;">
-                    <input type="hidden" name="animal" value="@animal.Key" />
-                    <button class="btn btn-sm btn-outline-secondary">Wymień</button>
-                </form>
-                <form asp-action="ShowTradesWithPlayers" method="get" style="display:inline;">
-                    <input type="hidden" name="animal" value="@animal.Key" />
-                    <button class="btn btn-sm btn-outline-secondary">Wymień z innym graczem</button>
-                </form>
-
-            }
-            else
-            {
-            <span class="text-muted">Nie mozesz zrobić żadnej akcji</span>
-            }
-        </td>
-    </tr>
-    }
-x
-    </tbody>
-</table>
-
-<h4>Zwierzęta dostępne w banku:</h4>
-
-<table class="table table-bordered w-50">
-    <thead class="table-light">
-    <tr>
-        <th style="width: 20%">Obraz</th>
-        <th style="width: 50%">Zwierzę</th>
-        <th style="width: 30%">Ilość</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    @foreach (var animal in Model.Bank)
-    {
-    <tr>
-        <td>
-            <img src="@Model.GetAnimalImagePath(animal.Key)" alt="@animal.Key" width="40" />
-        </td>
-        <td>@animal.Key</td>
-        <td>@animal.Value</td>
-    </tr>
-    }
-
-    </tbody>
-</table>
-
-
-
-
-@if (!Model.DiceRolledThisTurn)
-{
-    <form asp-action="RollDice" method="post">
-        <button type="submit">🎲 Roll</button>
-    </form>
-}
-
-
-
-@if (Model.DiceRolledThisTurn)
-{
-    <form asp-action="NextTurn" method="post">
-        <button type="submit">Next player</button>
-    </form>
-}
 
 <div class="modal fade" id="rollResultModal" tabindex="-1" aria-labelledby="rollResultLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -114,17 +107,17 @@ x
             <div class="modal-body">
                 @if (Model.LastRoll != null)
                 {
-                    var (a1, a2) = Model.LastRoll.Value;
-                    <div class="d-flex justify-content-center gap-4">
-                        <div>
-                            <img src="@Model.GetAnimalImagePath(a1)" width="60" />
-                            <p>@a1</p>
-                        </div>
-                        <div>
-                            <img src="@Model.GetAnimalImagePath(a2)" width="60" />
-                            <p>@a2</p>
-                        </div>
+                var (a1, a2) = Model.LastRoll.Value;
+                <div class="d-flex justify-content-center gap-4">
+                    <div>
+                        <img src="@Model.GetAnimalImagePath(a1)" width="60" />
+                        <p>@a1</p>
                     </div>
+                    <div>
+                        <img src="@Model.GetAnimalImagePath(a2)" width="60" />
+                        <p>@a2</p>
+                    </div>
+                </div>
                 }
             </div>
             <div class="modal-footer justify-content-center">
@@ -143,6 +136,4 @@ x
     };
 </script>
 }
-
-
 
