@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperFarmer", "SuperFarmer\SuperFarmer.csproj", "{D6DB1639-E310-4779-8942-1F32A432E20D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperFarmer.Tests", "SuperFarmer.Tests\SuperFarmer.Tests.csproj", "{F742DA95-F5F9-4D6F-A124-22687B55F89E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{D6DB1639-E310-4779-8942-1F32A432E20D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6DB1639-E310-4779-8942-1F32A432E20D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6DB1639-E310-4779-8942-1F32A432E20D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F742DA95-F5F9-4D6F-A124-22687B55F89E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F742DA95-F5F9-4D6F-A124-22687B55F89E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F742DA95-F5F9-4D6F-A124-22687B55F89E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F742DA95-F5F9-4D6F-A124-22687B55F89E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
