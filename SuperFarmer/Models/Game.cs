@@ -27,6 +27,8 @@ namespace SuperFarmer.Models
         
         public Dictionary<Animal, int> AddedToHerd { get; set; } = new();
         
+        public Dictionary<Animal, int> RemovedFromHerd { get; set; } = new();
+        
         public string GetAnimalImagePath(Animal animal)
         {
             return $"/images/{animal.ToString().ToLower()}.png";
@@ -93,6 +95,7 @@ namespace SuperFarmer.Models
             // HasExchangedThisTurn = false;
             LastRoll = null;
             AddedToHerd.Clear();
+            RemovedFromHerd.Clear();
         }
         
         public void RollDice()
@@ -103,16 +106,14 @@ namespace SuperFarmer.Models
             
             DiceRolledThisTurn = true;
         }
-        
         public void Breed()
         {
-            AddedToHerd.Clear(); 
-
+            AddedToHerd.Clear();
             if (LastRoll == null) return;
 
             var currentPlayer = CurrentPlayer;
             var (roll1, roll2) = LastRoll.Value;
-            
+
             var rolled = new Dictionary<Animal, int>();
             foreach (var animal in new[] { roll1, roll2 })
             {
@@ -124,94 +125,99 @@ namespace SuperFarmer.Models
 
             var breedable = new[] { Animal.Rabbit, Animal.Sheep, Animal.Pig };
 
-            foreach (var type in breedable)
+            var possible = rolled.Keys
+                .Union(currentPlayer.Animals.Keys)
+                .Where(animal => breedable.Contains(animal))
+                .Distinct();
+
+            foreach (var animal in possible)
             {
-                int fromDice = rolled.ContainsKey(type) ? rolled[type] : 0;
-                int owned = currentPlayer.Animals.ContainsKey(type) ? currentPlayer.Animals[type] : 0;
+                int fromDice = rolled.GetValueOrDefault(animal);
+                int owned = currentPlayer.Animals.GetValueOrDefault(animal);
 
                 int total = fromDice + owned;
                 int pairs = total / 2;
 
                 if (pairs > 0)
                 {
-                    int available = Bank.ContainsKey(type) ? Bank[type] : 0;
+                    int available = Bank.GetValueOrDefault(animal);
                     int toGive = Math.Min(pairs, available);
 
                     if (toGive > 0)
                     {
-                        if (!currentPlayer.Animals.ContainsKey(type))
-                            currentPlayer.Animals[type] = 0;
+                        currentPlayer.Animals[animal] = currentPlayer.Animals.GetValueOrDefault(animal) + toGive;
+                        Bank[animal] = Bank.GetValueOrDefault(animal) - toGive;
 
-                        currentPlayer.Animals[type] += toGive;
-                        Bank[type] -= toGive;
-                        
-                        if (!AddedToHerd.ContainsKey(type))
-                            AddedToHerd[type] = 0;
-
-                        AddedToHerd[type] += toGive;
+                        AddedToHerd[animal] = AddedToHerd.GetValueOrDefault(animal) + toGive;
                     }
                 }
             }
         }
 
         public void AnimalEating()
+{
+    if (LastRoll == null) return;
+
+    RemovedFromHerd.Clear(); 
+
+    var currentPlayer = CurrentPlayer;
+    var (roll1, roll2) = LastRoll.Value;
+
+    bool foxRolled = roll1 == Animal.Fox || roll2 == Animal.Fox;
+    bool wolfRolled = roll1 == Animal.Wolf || roll2 == Animal.Wolf;
+
+    if (foxRolled)
+    {
+        if (currentPlayer.Animals.ContainsKey(Animal.SmallDog) && currentPlayer.Animals[Animal.SmallDog] > 0)
         {
-            if (LastRoll == null) return;
+            currentPlayer.Animals[Animal.SmallDog]--;
+            if (currentPlayer.Animals[Animal.SmallDog] == 0)
+                currentPlayer.Animals.Remove(Animal.SmallDog);
 
-            var currentPlayer = CurrentPlayer;
-            var (roll1, roll2) = LastRoll.Value;
-
-            bool foxRolled = roll1 == Animal.Fox || roll2 == Animal.Fox;
-            bool wolfRolled = roll1 == Animal.Wolf || roll2 == Animal.Wolf;
-            
-            if (foxRolled)
+            Bank[Animal.SmallDog] = Bank.GetValueOrDefault(Animal.SmallDog) + 1;
+            RemovedFromHerd[Animal.SmallDog] = 1;
+        }
+        else if (currentPlayer.Animals.ContainsKey(Animal.Rabbit))
+        {
+            int lost = currentPlayer.Animals[Animal.Rabbit] - 1;
+            if (lost > 0)
             {
-                if (currentPlayer.Animals.ContainsKey(Animal.SmallDog) && currentPlayer.Animals[Animal.SmallDog] > 0)
-                {
-                    currentPlayer.Animals[Animal.SmallDog] -= 1;
-                    if (currentPlayer.Animals[Animal.SmallDog] == 0)
-                        currentPlayer.Animals.Remove(Animal.SmallDog);
-
-                    Bank[Animal.SmallDog] = Bank.GetValueOrDefault(Animal.SmallDog) + 1;
-                }
-                else if (currentPlayer.Animals.ContainsKey(Animal.Rabbit))
-                {
-                    int lost = currentPlayer.Animals[Animal.Rabbit] - 1;
-                    if (lost > 0)
-                    {
-                        currentPlayer.Animals[Animal.Rabbit] = 1;
-                        Bank[Animal.Rabbit] = Bank.GetValueOrDefault(Animal.Rabbit) + lost;
-                    }
-                }
-            }
-            
-            if (wolfRolled)
-            {
-                if (currentPlayer.Animals.ContainsKey(Animal.BigDog) && currentPlayer.Animals[Animal.BigDog] > 0)
-                {
-                    currentPlayer.Animals[Animal.BigDog] -= 1;
-                    if (currentPlayer.Animals[Animal.BigDog] == 0)
-                        currentPlayer.Animals.Remove(Animal.BigDog);
-
-                    Bank[Animal.BigDog] = Bank.GetValueOrDefault(Animal.BigDog) + 1;
-                }
-                else
-                {
-                    var protectedAnimals = new[] { Animal.Rabbit, Animal.Horse, Animal.SmallDog };
-
-                    var animalsToRemove = currentPlayer.Animals.Keys
-                        .Where(a => !protectedAnimals.Contains(a))
-                        .ToList();
-
-                    foreach (var animal in animalsToRemove)
-                    {
-                        int amount = currentPlayer.Animals[animal];
-                        currentPlayer.Animals.Remove(animal);
-                        Bank[animal] = Bank.GetValueOrDefault(animal) + amount;
-                    }
-                }
+                currentPlayer.Animals[Animal.Rabbit] = 1;
+                Bank[Animal.Rabbit] = Bank.GetValueOrDefault(Animal.Rabbit) + lost;
+                RemovedFromHerd[Animal.Rabbit] = lost;
             }
         }
+    }
+    if (wolfRolled)
+    {
+        if (currentPlayer.Animals.ContainsKey(Animal.BigDog) && currentPlayer.Animals[Animal.BigDog] > 0)
+        {
+            currentPlayer.Animals[Animal.BigDog]--;
+            if (currentPlayer.Animals[Animal.BigDog] == 0)
+                currentPlayer.Animals.Remove(Animal.BigDog);
+
+            Bank[Animal.BigDog] = Bank.GetValueOrDefault(Animal.BigDog) + 1;
+            RemovedFromHerd[Animal.BigDog] = 1;
+        }
+        else
+        {
+            var protectedAnimals = new[] { Animal.Rabbit, Animal.Horse, Animal.SmallDog };
+
+            var animalsToRemove = currentPlayer.Animals.Keys
+                .Where(a => !protectedAnimals.Contains(a))
+                .ToList();
+
+            foreach (var animal in animalsToRemove)
+            {
+                int amount = currentPlayer.Animals[animal];
+                currentPlayer.Animals.Remove(animal);
+
+                Bank[animal] = Bank.GetValueOrDefault(animal) + amount;
+                RemovedFromHerd[animal] = amount;
+            }
+        }
+    }
+}
 
         
         public int? CheckVictory()

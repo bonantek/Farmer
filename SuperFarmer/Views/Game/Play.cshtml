@@ -6,13 +6,23 @@
         <h2 class="text-success">Kolej gracza numer @Model.CurrentPlayer.Index</h2>
     </div>
 
-    @if (Model.AddedToHerd != null && Model.AddedToHerd.Any())
+    @if (Model.RemovedFromHerd != null && Model.RemovedFromHerd.Any())
+    {
+    <div class="alert alert-danger text-center">
+        <strong>Utracono zwierzęta:</strong>
+        @foreach (var entry in Model.RemovedFromHerd)
+        {
+        <span class="mx-2">@entry.Value × <img src="@Model.GetAnimalImagePath(entry.Key)" width="30" /></span>
+        }
+    </div>
+    }
+    else if (Model.AddedToHerd != null && Model.AddedToHerd.Any())
     {
     <div class="alert alert-success text-center">
         <strong>Do stada dodano:</strong>
         @foreach (var entry in Model.AddedToHerd)
         {
-        <span class="mx-2">@entry.Value × <img src="@Model.GetAnimalImagePath(entry.Key)" width="30" alt="@entry.Key" /></span>
+        <span class="mx-2">@entry.Value × <img src="@Model.GetAnimalImagePath(entry.Key)" width="30" /></span>
         }
     </div>
     }
