@@ -25,6 +25,8 @@ namespace SuperFarmer.Models
         
         public Dictionary<Animal, int> Bank { get; set; }
         
+        public Dictionary<Animal, int> AddedToHerd { get; set; } = new();
+        
         public string GetAnimalImagePath(Animal animal)
         {
             return $"/images/{animal.ToString().ToLower()}.png";
@@ -90,6 +92,7 @@ namespace SuperFarmer.Models
             DiceRolledThisTurn = false;
             // HasExchangedThisTurn = false;
             LastRoll = null;
+            AddedToHerd.Clear();
         }
         
         public void RollDice()
@@ -103,13 +106,14 @@ namespace SuperFarmer.Models
         
         public void Breed()
         {
+            AddedToHerd.Clear();
+
             if (LastRoll == null) return;
 
             var currentPlayer = CurrentPlayer;
             var (roll1, roll2) = LastRoll.Value;
-            
-            var rolled = new Dictionary<Animal, int>();
 
+            var rolled = new Dictionary<Animal, int>();
             foreach (var animal in new[] { roll1, roll2 })
             {
                 if (!rolled.ContainsKey(animal))
@@ -122,9 +126,11 @@ namespace SuperFarmer.Models
 
             foreach (var type in breedable)
             {
-                int owned = currentPlayer.Animals.ContainsKey(type) ? currentPlayer.Animals[type] : 0;
-                int fromDice = rolled.ContainsKey(type) ? rolled[type] : 0;
+                if (!rolled.ContainsKey(type)) continue;
+                if (!currentPlayer.Animals.ContainsKey(type)) continue;
 
+                int owned = currentPlayer.Animals[type];
+                int fromDice = rolled.ContainsKey(type) ? rolled[type] : 0;
                 int total = owned + fromDice;
                 int pairs = total / 2;
 
@@ -135,16 +141,18 @@ namespace SuperFarmer.Models
 
                     if (toGive > 0)
                     {
-                        if (!currentPlayer.Animals.ContainsKey(type))
-                            currentPlayer.Animals[type] = 0;
-
                         currentPlayer.Animals[type] += toGive;
                         Bank[type] -= toGive;
+
+                        if (!AddedToHerd.ContainsKey(type))
+                            AddedToHerd[type] = 0;
+
+                        AddedToHerd[type] += toGive;
                     }
                 }
             }
-
         }
+
         public void AnimalEating()
         {
             if (LastRoll == null) return;

@@ -6,12 +6,17 @@
         <h2 class="text-success">Kolej gracza numer @Model.CurrentPlayer.Index</h2>
     </div>
 
-    @if (Model.LastRoll != null)
+    @if (Model.AddedToHerd != null && Model.AddedToHerd.Any())
     {
-        <div class="alert alert-info text-center">
-            <strong>Wylosowane zwierzęta:</strong> @Model.LastRoll.Value.Item1 i @Model.LastRoll.Value.Item2
-        </div>
+    <div class="alert alert-success text-center">
+        <strong>Do stada dodano:</strong>
+        @foreach (var entry in Model.AddedToHerd)
+        {
+        <span class="mx-2">@entry.Value × <img src="@Model.GetAnimalImagePath(entry.Key)" width="30" alt="@entry.Key" /></span>
+        }
+    </div>
     }
+
 
     @if (TempData["Error"] != null)
     {
