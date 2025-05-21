@@ -106,13 +106,13 @@ namespace SuperFarmer.Models
         
         public void Breed()
         {
-            AddedToHerd.Clear();
+            AddedToHerd.Clear(); 
 
             if (LastRoll == null) return;
 
             var currentPlayer = CurrentPlayer;
             var (roll1, roll2) = LastRoll.Value;
-
+            
             var rolled = new Dictionary<Animal, int>();
             foreach (var animal in new[] { roll1, roll2 })
             {
@@ -126,12 +126,10 @@ namespace SuperFarmer.Models
 
             foreach (var type in breedable)
             {
-                if (!rolled.ContainsKey(type)) continue;
-                if (!currentPlayer.Animals.ContainsKey(type)) continue;
-
-                int owned = currentPlayer.Animals[type];
                 int fromDice = rolled.ContainsKey(type) ? rolled[type] : 0;
-                int total = owned + fromDice;
+                int owned = currentPlayer.Animals.ContainsKey(type) ? currentPlayer.Animals[type] : 0;
+
+                int total = fromDice + owned;
                 int pairs = total / 2;
 
                 if (pairs > 0)
@@ -141,9 +139,12 @@ namespace SuperFarmer.Models
 
                     if (toGive > 0)
                     {
+                        if (!currentPlayer.Animals.ContainsKey(type))
+                            currentPlayer.Animals[type] = 0;
+
                         currentPlayer.Animals[type] += toGive;
                         Bank[type] -= toGive;
-
+                        
                         if (!AddedToHerd.ContainsKey(type))
                             AddedToHerd[type] = 0;
 

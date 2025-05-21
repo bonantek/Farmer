@@ -4,39 +4,53 @@
     var exchanges = ViewBag.Exchanges as List<Tuple<SuperFarmer.Models.Animal, int>>;
 }
 
-<h2>Możliwe wymiany za @ownedAnimal</h2>
+<div class="container mt-4">
+    <h2 class="mb-4">Możliwe wymiany za @ownedAnimal</h2>
 
-@if (!exchanges.Any())
-{
-    <p><em>Nie możesz nic wymienić za @ownedAnimal – za mało sztuk.</em></p>
-}
-else
-{
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Na co</th>
-            <th>Koszt</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var ex in exchanges)
-        {
-        <tr>
-            <td>@ex.Item1</td> 
-            <td>@ex.Item2 za @ownedAnimal</td>
-            <td>
-                <form asp-action="MakeExchange" method="post">
-                    <input type="hidden" name="targetAnimal" value="@ex.Item1" />
-                    <button class="btn btn-success btn-sm">Potwierdź</button>
-                </form>
-            </td>
-        </tr>
-        }
+    @if (!exchanges.Any())
+    {
+        <div class="alert alert-warning">
+            <strong>Brak dostępnych wymian.</strong> Nie posiadasz wystarczającej liczby zwierząt.
+        </div>
+    }
+    else
+    {
+        <table class="table table-striped table-bordered text-center">
+            <thead class="table-dark">
+            <tr>
+                <th>Otrzymujesz</th>
+                <th>Koszt</th>
+                <th>Akcja</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var ex in exchanges)
+            {
+                <tr>
+                    <td>
+                        <img src="@Model.GetAnimalImagePath(ex.Item1)" width="40" />
+                        <br />
+                        @ex.Item1
+                    </td>
+                    <td>
+                        @ex.Item2 ×
+                        <img src="@Model.GetAnimalImagePath(ownedAnimal)" width="40" />
+                        <br />
+                        @ownedAnimal
+                    </td>
+                    <td>
+                        <form asp-action="MakeExchange" method="post">
+                            <input type="hidden" name="targetAnimal" value="@ex.Item1" />
+                            <button class="btn btn-success btn-sm">Potwierdź</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
 
-        </tbody>
-    </table>
-}
-
-<a asp-action="Play" class="btn btn-secondary">Wróć do gry</a>
+    <div class="text-center mt-4">
+        <a asp-action="Play" class="btn btn-secondary">⬅️ Wróć do gry</a>
+    </div>
+</div>

@@ -10,7 +10,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c345d8c0-4902-401d-8b1e-4d29ac8bd4c0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SuperFarmer/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SuperFarmer/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SuperFarmer/Models/Game.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SuperFarmer/Models/Game.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SuperFarmer/Views/Game/ExchangeOptions.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SuperFarmer/Views/Game/ExchangeOptions.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SuperFarmer/Views/Game/Play.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SuperFarmer/Views/Game/Play.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

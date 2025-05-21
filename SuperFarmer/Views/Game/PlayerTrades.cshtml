@@ -4,42 +4,56 @@
     var offered = (SuperFarmer.Models.Animal)ViewBag.OfferedAnimal;
 }
 
-<h3>Możliwe wymiany z innymi graczami za: @offered</h3>
+<div class="container mt-4">
+    <h2 class="mb-4">Możliwe wymiany z innymi graczami za: @offered</h2>
 
-@if (trades == null || !trades.Any())
-{
-    <p>Brak dostępnych wymian.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Gracz</th>
-            <th>Dostaniesz</th>
-            <th>Oddasz</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var trade in trades)
-        {
-            <tr>
-                <td>Gracz @trade.Item1</td>
-                <td>@trade.Item2 × @trade.Item3</td>
-                <td>@trade.Item4 × @trade.Item5</td>
-                <td>
-                    <form asp-action="ExecutePlayerTrade" method="post">
-                        <input type="hidden" name="targetPlayerIndex" value="@trade.Item1" />
-                        <input type="hidden" name="targetAnimal" value="@trade.Item2" />
-                        <input type="hidden" name="targetAmount" value="@trade.Item3" />
-                        <input type="hidden" name="offeredAnimal" value="@trade.Item4" />
-                        <input type="hidden" name="offeredAmount" value="@trade.Item5" />
-                        <button class="btn btn-sm btn-success">Wymień</button>
-                    </form>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
+    @if (trades == null || !trades.Any())
+    {
+        <div class="alert alert-warning">
+            <strong>Brak dostępnych wymian.</strong> Żaden z graczy nie może wymienić się za @offered.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>Gracz</th>
+                    <th>Otrzymasz</th>
+                    <th>Oddasz</th>
+                    <th>Akcja</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var trade in trades)
+            {
+                <tr>
+                    <td>Gracz @trade.Item1</td>
+                    <td>
+                        @trade.Item3 × <img src="@Model.GetAnimalImagePath(trade.Item2)" width="40" /> <br />
+                        @trade.Item2
+                    </td>
+                    <td>
+                        @trade.Item5 × <img src="@Model.GetAnimalImagePath(trade.Item4)" width="40" /> <br />
+                        @trade.Item4
+                    </td>
+                    <td>
+                        <form asp-action="ExecutePlayerTrade" method="post">
+                            <input type="hidden" name="targetPlayerIndex" value="@trade.Item1" />
+                            <input type="hidden" name="targetAnimal" value="@trade.Item2" />
+                            <input type="hidden" name="targetAmount" value="@trade.Item3" />
+                            <input type="hidden" name="offeredAnimal" value="@trade.Item4" />
+                            <input type="hidden" name="offeredAmount" value="@trade.Item5" />
+                            <button class="btn btn-sm btn-success">Wymień</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+
+    <div class="text-center mt-4">
+        <a asp-action="Play" class="btn btn-secondary">⬅️ Wróć do gry</a>
+    </div>
+</div>
