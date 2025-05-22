@@ -180,6 +180,12 @@ namespace SuperFarmer.Controllers
 
             return RedirectToAction("Play");
         }
+        
+        public IActionResult GameOver()
+        {
+            return View();
+        }
+
 
 
 
