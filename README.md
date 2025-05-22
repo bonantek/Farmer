@@ -30,7 +30,7 @@ Nie jest to  aplikacja 'perfekcyjna' lecz jednak jest to prototyp napisany w dwa
 
 Poniżej kilka przykładowych widoków z aplikacji:
 
-![Ekran 1](images/1.jpeg)
+![Ekran 1](images/5.jpeg)
 
 ![Ekran 2](images/2.jpeg)  
 
