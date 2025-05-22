@@ -13,24 +13,20 @@
 
 ## Architektura i podejście
 
-Projekt został zrealizowany jako **monolityczna aplikacja webowa** w **ASP.NET Core MVC**.  
-Nie korzysta z bazy danych – dane są przechowywane w pamięci aplikacji (singleton `Game`).
+Ze względu na ograniczone ramy czasowe zdecydowałem się na możliwie najprostsze rozwiązanie — czyli monolityczną aplikację webową w ASP.NET Core MVC bez bazy danych.
+Mimo jednak krótkiego czasu, starałem się zrobić produkt MVP, który bedzie zawierał podstawową logikę gry.
 
-Zdecydowałem się na takie rozwiązanie, ponieważ miałem bardzo mało czasu, a gra farmer to głównie operacje na danych i ich prezentacja. Dzięki temu webowa wersja była najprostsza do wdrożenia i wystarczająca funkcjonalnie.
+Uważam, że przy większym zakresie czasowym projekt mógłby zostać rozszerzony o
 
-Z perspektywy czasu widzę jednak, że webówka nie była idealnym wyborem – pojawiło się wiele sytuacji, które byłyby łatwiejsze do rozwiązania w innej architekturze (np. wymiany między graczami, usuwanie gracza po wygranej, synchronizacja stanu, lepsze zarządzanie UI).
+1. Integrację z bazą danych (np. PostgreSQL lub SQLite), aby umożliwić trwałe zapisywanie rozgrywek. 
+2. Gruntowny refaktoring kodu, aby poprawić jego jakość i czytelność (unikanie powtórzeń, więcej klas etc)
+3. Wprowadzenie wzorców projektowych (Repository, Service)
+4. Dodanie logowania i autoryzacji użytkowników -- pozwoliłby to na grę online
+5. Dodanie testów jednostkowych i integracyjnych
 
-Gdybym miał więcej czasu:
-- oddzieliłbym frontend od backendu (np. **API + Frontend** albo **Blazor WebAssembly**),
-- umożliwiłbym grę między użytkownikami online,
-- dodałbym zapisywanie i wczytywanie stanu gry (np. z użyciem bazy danych),
-- rozważyłbym stworzenie **aplikacji w .NET MAUI**.
+Nie jest to  aplikacja 'perfekcyjna' lecz jednak jest to prototyp napisany w dwa wieczory ;) 
 
-Obecne podejście to **kompromis** między szybkością realizacji a funkcjonalnością.  
-Projekt działa i pozwala rozegrać pełną partię SuperFarmera z obsługą wszystkich głównych zasad gry.
-
-
-### 📸 Zrzuty ekranu z gry
+### Zrzuty ekranu z gry
 
 Poniżej kilka przykładowych widoków z aplikacji:
 
