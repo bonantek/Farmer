@@ -3,13 +3,16 @@
     var winnerIndex = (int)ViewBag.WinnerIndex;
     var winner = Model.Winner;
 }
+@{
+ViewData["Title"] = "Victory";
+}
 
 <div class="text-center mt-5">
-    <h2>Gracz @winnerIndex wygrał grę!</h2>
-    <p>Posiada po jednej sztuce każdego głównego zwierzęcia.</p>
+    <h2>Player @winnerIndex has won the game!</h2>
+    <p>They own at least one of each main animal.</p>
 
     <form asp-action="RemoveWinner" method="post">
         <input type="hidden" name="winnerIndex" value="@winnerIndex" />
-        <button type="submit" class="btn btn-primary btn-lg mt-3">Kontynuuj grę bez tego gracza</button>
+        <button type="submit" class="btn btn-primary btn-lg mt-3">Continue the game without this player</button>
     </form>
 </div>

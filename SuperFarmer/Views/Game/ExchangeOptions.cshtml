@@ -4,13 +4,17 @@
     var exchanges = ViewBag.Exchanges as List<Tuple<SuperFarmer.Models.Animal, int>>;
 }
 
+@{
+ViewData["Title"] = "Exchange";
+}
+
 <div class="container mt-4">
-    <h2 class="mb-4">Możliwe wymiany za @ownedAnimal</h2>
+    <h2 class="mb-4">Possible exchanges for @ownedAnimal</h2>
 
     @if (!exchanges.Any())
     {
         <div class="alert alert-warning">
-            <strong>Brak dostępnych wymian.</strong> Nie posiadasz wystarczającej liczby zwierząt.
+            <strong>No available exchanges.</strong> You don't have enough animals.
         </div>
     }
     else
@@ -18,9 +22,9 @@
         <table class="table table-striped table-bordered text-center">
             <thead class="table-dark">
             <tr>
-                <th>Otrzymujesz</th>
-                <th>Koszt</th>
-                <th>Akcja</th>
+                <th>You receive</th>
+                <th>Cost</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -41,7 +45,7 @@
                     <td>
                         <form asp-action="MakeExchange" method="post">
                             <input type="hidden" name="targetAnimal" value="@ex.Item1" />
-                            <button class="btn btn-success btn-sm">Potwierdź</button>
+                            <button class="btn btn-success btn-sm">Confirm</button>
                         </form>
                     </td>
                 </tr>
@@ -51,6 +55,6 @@
     }
 
     <div class="text-center mt-4">
-        <a asp-action="Play" class="btn btn-secondary">⬅️ Wróć do gry</a>
+        <a asp-action="Play" class="btn btn-secondary">⬅️ Back to game</a>
     </div>
 </div>

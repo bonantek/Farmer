@@ -1,28 +1,28 @@
 @model SuperFarmer.Models.Game
 @{
-    ViewData["Title"] = "Instrukcja gry";
+    ViewData["Title"] = "Game Instructions";
 }
 
 <div class="container mt-4">
-    <h1 class="text-center mb-4">📘 Instrukcja gry</h1>
+    <h1 class="text-center mb-4">📘 Game Instructions</h1>
 
     <p>
-        SuperFarmer to strategiczna gra planszowa, w której zarządzasz swoim stadem i wymieniasz zwierzęta, aby zdobyć wszystkie rodzaje i zostać zwycięzcą. Rzucasz dwiema kostkami, hodujesz zwierzęta, bronisz się przed wilkiem i lisem oraz wymieniasz zasoby według tabeli poniżej.
+        SuperFarmer is a strategic board game where you manage your herd and trade animals to collect all types and become the winner. You roll two dice, breed animals, defend against the wolf and fox, and trade resources according to the table below.
     </p>
 
-    <h3 class="mt-5">Cel gry</h3>
+    <h3 class="mt-5">Game Objective</h3>
     <p>
-        Zgromadzenie w swoim stadzie przynajmniej:
-        <strong>jednego królika, owcy, świni, krowy i konia</strong>.
+        To gather in your herd at least:
+        <strong>one rabbit, sheep, pig, cow, and horse</strong>.
     </p>
 
-    <h3 class="mt-4">Tabela wymian</h3>
+    <h3 class="mt-4">Exchange Table</h3>
 
     <table class="table table-bordered table-striped mt-3 text-center align-middle">
         <thead class="table-dark">
             <tr>
-                <th>Otrzymujesz</th>
-                <th>Oddajesz</th>
+                <th>You Receive</th>
+                <th>You Give</th>
             </tr>
         </thead>
         <tbody>
@@ -45,25 +45,23 @@
         </tbody>
     </table>
 
-    <h3 class="mt-5">Wilk i lis</h3>
+    <h3 class="mt-5">Wolf and Fox</h3>
     <ul class="list-unstyled">
         <li class="mb-3 d-flex align-items-center">
             <img src="@Model.GetAnimalImagePath(Animal.Wolf)" width="40" class="me-3" />
-            <strong>Wilk</strong>: zjada wszystkie zwierzęta oprócz konia, królika i małego psa, chyba że masz dużego psa.
+            <strong>Wolf</strong>: eats all animals except the horse, rabbit, and small dog — unless you have a big dog.
         </li>
         <li class="mb-3 d-flex align-items-center">
             <img src="@Model.GetAnimalImagePath(Animal.Fox)" width="40" class="me-3" />
-            <strong>Lis</strong>: zjada wszystkie króliki poza jednym, chyba że masz małego psa.
+            <strong>Fox</strong>: eats all rabbits except one — unless you have a small dog.
         </li>
     </ul>
 
-
-    <h3 class="mt-4">Inne zasady</h3>
+    <h3 class="mt-4">Other Rules</h3>
     <ul>
-        <li>Na początku gry każdy gracz otrzymuje 1 królika.</li>
-        <li>Przed rzutem możesz wykonać dowolną liczbę wymian z bankiem (lub jednym graczem).</li>
-        <li>Wymiany są możliwe tylko jeśli bank posiada odpowiednie zwierzęta.</li>
-        <li>Gracz może posiadać psy chroniące przed atakami lisów i wilków.</li>
+        <li>At the beginning of the game, each player receives 1 rabbit.</li>
+        <li>Before rolling the dice, you may perform any number of exchanges with the bank (or one player).</li>
+        <li>Exchanges are only possible if the bank has the required animals.</li>
+        <li>A player can have dogs that protect against fox and wolf attacks.</li>
     </ul>
-    
 </div>
