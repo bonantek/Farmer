@@ -3,3 +3,26 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+
+.idea/
+*.sln.DotSettings.user
+
+# macOS
+.DS_Store
+
+# .NET build artifacts
+bin/
+obj/
+*.user
+*.userosscache
+*.suo
+
+# VS Code / Rider
+.vscode/
+.idea/
+
+# ASP.NET logs or runtime files
+*.log
+
+# global.json backup
+global.json.bak
