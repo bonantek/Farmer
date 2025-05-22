@@ -1,13 +1,15 @@
 @model SuperFarmer.Models.Game
 @{
-    int winnerIndex = (int)ViewBag.WinnerIndex;
+    var winnerIndex = (int)ViewBag.WinnerIndex;
+    var winner = Model.Winner;
 }
 
-<h2>Gracz numer @winnerIndex wygrał!</h2>
+<div class="text-center mt-5">
+    <h2>Gracz @winnerIndex wygrał grę!</h2>
+    <p>Posiada po jednej sztuce każdego głównego zwierzęcia.</p>
 
-<p>Gratulacje! Zebrałeś wszystkie wymagane zwierzęta.</p>
-
-<form asp-action="RemoveWinner" method="post">
-    <input type="hidden" name="winnerIndex" value="@winnerIndex" />
-    <button class="btn btn-primary">Kontynuuj grę bez zwycięzcy</button>
-</form>
+    <form asp-action="RemoveWinner" method="post">
+        <input type="hidden" name="winnerIndex" value="@winnerIndex" />
+        <button type="submit" class="btn btn-primary btn-lg mt-3">Kontynuuj grę bez tego gracza</button>
+    </form>
+</div>

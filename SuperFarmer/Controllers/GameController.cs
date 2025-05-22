@@ -151,15 +151,38 @@ namespace SuperFarmer.Controllers
         public IActionResult Instructions()
         {
             if (_game == null)
-                _game = new Game(new List<Player>()); // tylko po to, by mieć dostęp do .ExchangeRates i .GetAnimalImagePath
+                _game = new Game(new List<Player>()); 
 
             return View(_game);
         }
-
         
-        //TODO: Add remove winner
-        // public IActionResult RemoveWinner()
-        // {}
+        [HttpPost]
+        public IActionResult RemoveWinner(int winnerIndex)
+        {
+            if (_game == null || winnerIndex < 0 || winnerIndex >= _game.Players.Count)
+                return RedirectToAction("Play");
+
+            if (winnerIndex < _game.CurrentPlayerIndex)
+                _game.CurrentPlayerIndex--;
+
+            _game.Players.RemoveAt(winnerIndex);
+
+            if (_game.Players.Count < 2)
+                return View("GameOver");
+
+            if (_game.CurrentPlayerIndex >= _game.Players.Count)
+                _game.CurrentPlayerIndex = 0;
+            
+            _game.DiceRolledThisTurn = false;
+            _game.LastRoll = null;
+            _game.AddedToHerd.Clear();
+            _game.RemovedFromHerd.Clear();
+
+            return RedirectToAction("Play");
+        }
+
+
+
     }   
 }
 
