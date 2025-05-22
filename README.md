@@ -28,3 +28,16 @@ Gdybym miał więcej czasu:
 
 Obecne podejście to **kompromis** między szybkością realizacji a funkcjonalnością.  
 Projekt działa i pozwala rozegrać pełną partię SuperFarmera z obsługą wszystkich głównych zasad gry.
+
+
+### 📸 Zrzuty ekranu z gry
+
+Poniżej kilka przykładowych widoków z aplikacji:
+
+![Ekran 1](images/1.jpeg)
+
+![Ekran 2](images/2.jpeg)  
+
+![Ekran 3](images/3.jpeg)
+
+![Ekran 4](images/4.jpeg)
